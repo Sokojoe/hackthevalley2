@@ -46,7 +46,7 @@ class App extends Component {
         <div className="row">
           <div className="col-md-offset-0 col-md-12 info location">
             <header className="App-header">
-              <h1>{this.state.location}</h1>
+                <h1><img className="flag" src={this.state.flag}></img>{this.state.location}</h1>
             </header>
           </div>
         </div>
@@ -152,8 +152,9 @@ class App extends Component {
       var newState = this.state;
       this.countryPromise.then((countryList) => {
         newState.countryName = countryList[countryID]["name"]
+        newState.location = newState.countryName;
         newState.population = countryList[countryID]['population'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        this.setState(newState);
+        newState.flag = countryList[countryID]['flag']
         resolve(newState.countryName);
       })
     })
