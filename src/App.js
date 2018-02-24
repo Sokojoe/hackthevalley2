@@ -59,18 +59,25 @@ class App extends Component {
     this.getRandomCountry().then((res) => {
       return this.queryImage(res)
     }).then((photos) => {
-      var photoinfo = photos['photos']['photo'][0];
-      this.queryImageLocation(photoinfo['id']).then((res) => console.log(res))
+      console.log(photos)
+      var photoinfo;
+      if (photos){
+        photoinfo = photos['photos']['photo'][0];
+      }
+      else{
+         photoinfo = {'url_o':"c1.staticflickr.com/1/66/203162060_5e9db072ab_b.jpg"}
+      }
       var url;
-      if (photoinfo) {
-        if (photoinfo['o_url']) {
-          url = photoinfo['o_url']
+        if (photoinfo['url_o']) {
+          console.log(photoinfo)
+          console.log(url = photoinfo['url_o'])
         } else {
           url = "https://farm" + photoinfo['farm'] + ".staticflickr.com/" + photoinfo['server'] + "/" + photoinfo['id'] + "_" + photoinfo['secret'] + "_b.jpg"
         }
-      } else {
-        url = "c1.staticflickr.com/1/66/203162060_5e9db072ab_b.jpg";
-      }
+
+      this.queryImageLocation(photoinfo['id']).then((res)=>{
+        console.log(res)
+      })
       this.setBackground(url)
     });
   }
