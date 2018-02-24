@@ -52,7 +52,13 @@ class App extends Component {
         return this.queryImage(res)
       }).then((photos)=>{
         console.log(photos);
-        var url = photos['photos']['photo'][0]['url_o']
+        var photoinfo = photos['photos']['photo'][0];
+        var url;
+        if (photoinfo['o_url']){
+          url = photoinfo['o_url']
+        } else{
+          url = "https://farm"+photoinfo['farm']+".staticflickr.com/"+photoinfo['server']+"/"+photoinfo['id']+"_"+photoinfo['secret']+"_b.jpg"
+        }
         this.setBackground(url)
       });
   }
