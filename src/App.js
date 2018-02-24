@@ -1,30 +1,35 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './App.css';
 
 class SearchButton extends Component {
 
-  render(){
-    return(
-       <button type="button" onClick={this.handleClick()}> Search Again</button>
-    )
+  constructor(props) {
+    super(props);
   }
 
-  handleClick(e){
-    console.log("Button Clicked");
+  render() {
+    return (
+      <button type="button" onClick={this.props.onClick}>
+        Search Again</button>
+    )
   }
 }
 
 class App extends Component {
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          {new SearchButton().render()}
+          <SearchButton onClick={()=>this.setBackground()}></SearchButton>
         </header>
-        <p className="App-intro">
-        </p>
+        <p className="App-intro"></p>
       </div>
     );
+  }
+
+  setBackground() {
+    document.body.style.backgroundImage = "url(\"https://farm3.staticflickr.com/2950/33451394876_5b94edcd1c_o.jpg\")";
   }
 }
 
