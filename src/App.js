@@ -8,8 +8,10 @@ class SearchButton extends Component {
   }
 
   render() {
-    return (<button className="SearchButton" type="button" onClick={this.props.onClick}>
-      Search Again</button>)
+    return (
+      <button className="SearchButton" type="button" onClick={this.props.onClick}>
+        Search Again</button>
+    )
   }
 }
 
@@ -18,8 +20,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bgUrl: "https://farm8.staticflickr.com/7368/15787518894_67d16cb3cd_k_d.jpg",
-      countryName: "France"
+      bgUrl: "https://c1.staticflickr.com/6/5611/15632179232_385c77cbca_h.jpg",
+      countryName: "Canada"
     };
     this.countryPromise = this.setCountryList();
   }
@@ -36,34 +38,41 @@ class App extends Component {
       backgroundSize: "cover"
     }
 
-    return (<div className="App" style={bgStyle}>
-      <header className="App-header">
-        <h1>{this.state.countryName}</h1>
-        <div className="button-div">
-          <SearchButton onClick={() => this.clickButton()}></SearchButton>
-        </div>
-      </header>
-      <p className="App-intro"></p>
-    </div>);
+    return (
+      <div className="App" style={bgStyle}>
+        <header className="App-header">
+          <h1>{this.state.countryName}</h1>
+          <div className="button-div">
+            <SearchButton onClick={() => this.clickButton()}></SearchButton>
+          </div>
+        </header>
+        <p className="App-intro"></p>
+      </div>
+    );
   }
 
   clickButton() {
-    this.getRandomCountry().then((res) =>{
-        return this.queryImage(res)
-      }).then((photos)=>{
-        console.log(photos);
-        var photoinfo = photos['photos']['photo'][0];
-        var url;
-        if (photoinfo['o_url']){
+    this.getRandomCountry().then((res) => {
+      return this.queryImage(res)
+    }).then((photos) => {
+      var photoinfo = photos['photos']['photo'][0];
+      var url;
+      if (photoinfo) {
+        if (photoinfo['o_url']) {
           url = photoinfo['o_url']
-        } else{
-          url = "https://farm"+photoinfo['farm']+".staticflickr.com/"+photoinfo['server']+"/"+photoinfo['id']+"_"+photoinfo['secret']+"_b.jpg"
+        } else {
+          url = "https://farm" + photoinfo['farm'] + ".staticflickr.com/" + photoinfo['server'] + "/" + photoinfo['id'] + "_" + photoinfo['secret'] + "_b.jpg"
         }
-        this.setBackground(url)
-      });
+      }
+      else {
+        url = "c1.staticflickr.com/1/66/203162060_5e9db072ab_b.jpg";
+      }
+
+      this.setBackground(url)
+    });
   }
 
-  setBackground(url){
+  setBackground(url) {
     var newState = this.state;
     newState.bgUrl = url;
     this.setState(newState);
@@ -90,7 +99,7 @@ class App extends Component {
       var numCountries = 250;
       var countryID = Math.floor(Math.random() * numCountries);
       var newState = this.state;
-      this.countryPromise.then((countryList)=>{
+      this.countryPromise.then((countryList) => {
         newState.countryName = countryList[countryID]["name"]
         this.setState(newState);
         resolve(newState.countryName);
@@ -99,11 +108,9 @@ class App extends Component {
     return promise;
   }
 
-  queryImage(country){
+  queryImage(country) {
     var xhr = new XMLHttpRequest();
-    var query = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f60a9176ead0ea9e3cf7d70b0a4353c7&text="
-    + country
-    + "+Landmark&sort=relevance&has_geo=1&extras=url_o&per_page=10&page=1&format=json&nojsoncallback=1";
+    var query = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f60a9176ead0ea9e3cf7d70b0a4353c7&text=" + country + "+landscape&sort=relevance&has_geo=1&extras=url_o&per_page=10&page=1&format=json&nojsoncallback=1";
     var promise = new Promise(function(resolve, reject) {
       console.log(query);
       xhr.open("GET", query);
