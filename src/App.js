@@ -21,7 +21,9 @@ class App extends Component {
     super(props);
     this.state = {
       bgUrl: "https://c1.staticflickr.com/6/5611/15632179232_385c77cbca_h.jpg",
-      countryName: "Canada"
+      countryName: "Canada",
+      population: 0,
+      subregion: "North America",
     };
     this.countryPromise = this.setCountryList();
   }
@@ -42,6 +44,8 @@ class App extends Component {
       <div className="App" style={bgStyle}>
         <header className="App-header">
           <h1>{this.state.countryName}</h1>
+          <h2>{this.state.subregion}</h2>
+          <h4>Population: {this.state.population}</h4>
           <div className="button-div">
             <SearchButton onClick={() => this.clickButton()}></SearchButton>
           </div>
@@ -56,7 +60,7 @@ class App extends Component {
       return this.queryImage(res)
     }).then((photos) => {
       var photoinfo = photos['photos']['photo'][0];
-      this.queryImageLocation(photoinfo['id']).then((res)=>console.log(res))
+      this.queryImageLocation(photoinfo['id']).then((res) => console.log(res))
       var url;
       if (photoinfo) {
         if (photoinfo['o_url']) {
@@ -64,8 +68,7 @@ class App extends Component {
         } else {
           url = "https://farm" + photoinfo['farm'] + ".staticflickr.com/" + photoinfo['server'] + "/" + photoinfo['id'] + "_" + photoinfo['secret'] + "_b.jpg"
         }
-      }
-      else {
+      } else {
         url = "c1.staticflickr.com/1/66/203162060_5e9db072ab_b.jpg";
       }
       this.setBackground(url)
@@ -101,6 +104,8 @@ class App extends Component {
       var newState = this.state;
       this.countryPromise.then((countryList) => {
         newState.countryName = countryList[countryID]["name"]
+        newState.population = countryList[countryID]['population'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        newState.subregion = countryList[countryID]['subregion']
         this.setState(newState);
         resolve(newState.countryName);
       })
