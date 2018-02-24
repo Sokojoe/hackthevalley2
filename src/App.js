@@ -19,7 +19,7 @@ class App extends Component {
     super(props);
     this.state = {
       bgUrl: "https://farm8.staticflickr.com/7368/15787518894_67d16cb3cd_k_d.jpg",
-      countryName: "hackthevalley2"
+      countryName: "France"
     };
     this.countryPromise = this.setCountryList();
   }
@@ -40,17 +40,26 @@ class App extends Component {
       <header className="App-header">
         <h1>{this.state.countryName}</h1>
         <div className="button-div">
-          <SearchButton onClick={() => this.setBackground()}></SearchButton>
+          <SearchButton onClick={() => this.clickButton()}></SearchButton>
         </div>
       </header>
       <p className="App-intro"></p>
     </div>);
   }
 
-  setBackground() {
+  clickButton() {
+    this.getRandomCountry().then((res) =>{
+        return this.queryImage(res)
+      }).then((photos)=>{
+        console.log(photos);
+        var url = photos['photos']['photo'][0]['url_o']
+        this.setBackground(url)
+      });
+  }
+
+  setBackground(url){
     var newState = this.state;
-    this.getRandomCountry().then((valid)=>this.queryImage(valid));
-    newState.bgUrl = "https://farm5.staticflickr.com/4382/36695323441_29f4831549_k_d.jpg";
+    newState.bgUrl = url;
     this.setState(newState);
   }
 
@@ -81,10 +90,9 @@ class App extends Component {
         resolve(newState.countryName);
       })
     })
-
     return promise;
   }
-  
+
   queryImage(country){
     var xhr = new XMLHttpRequest();
     var query = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f60a9176ead0ea9e3cf7d70b0a4353c7&text="
@@ -95,11 +103,13 @@ class App extends Component {
       xhr.open("GET", query);
       xhr.onload = function() {
         if (this.status >= 200 && this.status < 300) {
-          resolve(console.log(JSON.parse(xhr.response)))
+          var json = JSON.parse(xhr.response)
+          resolve(json)
         };
       }
       xhr.send();
     });
+    return promise;
   }
 }
 
