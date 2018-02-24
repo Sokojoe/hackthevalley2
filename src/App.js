@@ -8,10 +8,8 @@ class SearchButton extends Component {
   }
 
   render() {
-    return (
-      <button type="button" onClick={this.props.onClick}>
-        Search Again</button>
-    )
+    return (<button className="SearchButton" type="button" onClick={this.props.onClick}>
+      Search Again</button>)
   }
 }
 
@@ -20,7 +18,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        bgUrl: "https://farm8.staticflickr.com/7368/15787518894_67d16cb3cd_k_d.jpg"
+      bgUrl: "https://farm8.staticflickr.com/7368/15787518894_67d16cb3cd_k_d.jpg"
     };
   }
 
@@ -33,24 +31,22 @@ class App extends Component {
       left: "0",
       bottom: "0",
       right: "0",
-      backgroundSize: "cover",
+      backgroundSize: "cover"
     }
 
-    return (
-      <div className="App" style={bgStyle}>
-        <header className="App-header">
-          <SearchButton onClick={()=>this.setBackground()}></SearchButton>
-        </header>
-        <p className="App-intro"></p>
+    return (<div className="App" style={bgStyle}>
+      <header className="App-header"></header>
+      <div className="button-div">
+        <SearchButton onClick={() => this.setBackground()}></SearchButton>
       </div>
-    );
+      <p className="App-intro"></p>
+    </div>);
   }
 
   setBackground() {
     var newState = this.state;
     newState.bgUrl = "https://farm5.staticflickr.com/4382/36695323441_29f4831549_k_d.jpg";
     this.setState(newState);
-    //document.body.style.backgroundImage = "url(\"https://farm3.staticflickr.com/2950/33451394876_5b94edcd1c_o.jpg\")";
   }
 }
 
