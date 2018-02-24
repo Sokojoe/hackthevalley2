@@ -9,7 +9,7 @@ class SearchButton extends Component {
 
   render() {
     return (<button className="SearchButton" type="button" onClick={this.props.onClick}>
-      Search Again</button>)
+      NEXT LOCATION</button>)
   }
 }
 
@@ -57,10 +57,10 @@ class App extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="info col-md-offset-4 col-md-2">
+          <div className="info weather col-md-offset-2 col-md-4">
             {this.state.weather}
           </div>
-          <div className="info col-md-2">
+          <div className="info time col-md-4">
             {this.state.time}
           </div>
         </div>
@@ -98,9 +98,9 @@ class App extends Component {
       return photoinfo;
     }).then((photoinfo) => {
       return this.queryImageLocation(photoinfo['id']);
-    }).then((res) => {
-      console.log(res)
-      var locationJSON = res["photo"]["location"];
+    }).then((locationInfoJson) => {
+      console.log(locationInfoJson)
+      var locationJSON = locationInfoJson["photo"]["location"];
       var country = this.state.countryName;
       var place = "";
       if (locationJSON["country"]) {
@@ -116,7 +116,16 @@ class App extends Component {
       var title = place + country;
       console.log(title);
       newState.location = title;
-      //this.setLocation(title);
+      return locationJSON;
+    }).then((locationJSON) => {
+      var lat = locationJSON["latitude"];
+      var lon = locationJSON["longitude"];
+      console.log(lat, lon);
+      return this.getWeatherInfo(lat, lon);
+    }).then((weatherJSON) => {
+      var temp = Math.floor(weatherJSON["main"]["temp"] - 273.15);
+      var weather = weatherJSON["weather"][0]["description"];
+      newState.weather = weather + ", " + temp + "C";
     }).then(() => {
       this.setState(newState)
     });
@@ -171,6 +180,7 @@ class App extends Component {
       }
       xhr.send();
     });
+
     return promise;
   }
 
@@ -193,13 +203,14 @@ class App extends Component {
 
   getWeatherInfo(lat, lon) {
     var xhr = new XMLHttpRequest();
-    var query = "api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&APPID=a9393c4dd5430be62c906aad2a95965b"
+    var query = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&APPID=a9393c4dd5430be62c906aad2a95965b"
     var promise = new Promise(function(resolve, reject) {
       console.log(query);
       xhr.open("GET", query);
       xhr.onload = function() {
         if (this.status >= 200 && this.status < 300) {
           var json = JSON.parse(xhr.response)
+          console.log(json);
           resolve(json)
         };
       }

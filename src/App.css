@@ -58,13 +58,20 @@ button {
 .info{
   text-align: center;
   color: white;
-  font-size: 2em;
+  font-size: 1.75em;
   text-shadow: 0px 0px 3px black;
 }
 .location{
   display: inline-block;
 }
 
+.weather {
+  text-align: right;
+}
+
+.time {
+  text-align: left;
+}
 .App-header {
   align-items: center;
 }
