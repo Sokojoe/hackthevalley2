@@ -56,6 +56,7 @@ class App extends Component {
       return this.queryImage(res)
     }).then((photos) => {
       var photoinfo = photos['photos']['photo'][0];
+      this.queryImageLocation(photoinfo['id']).then((res)=>console.log(res))
       var url;
       if (photoinfo) {
         if (photoinfo['o_url']) {
@@ -67,7 +68,6 @@ class App extends Component {
       else {
         url = "c1.staticflickr.com/1/66/203162060_5e9db072ab_b.jpg";
       }
-
       this.setBackground(url)
     });
   }
@@ -124,6 +124,24 @@ class App extends Component {
     });
     return promise;
   }
+
+  queryImageLocation(id) {
+    var xhr = new XMLHttpRequest();
+    var query = "https://api.flickr.com/services/rest/?method=flickr.photos.geo.getLocation&api_key=f60a9176ead0ea9e3cf7d70b0a4353c7&photo_id=" + id + "&format=json&nojsoncallback=1";
+    var promise = new Promise(function(resolve, reject) {
+      console.log(query);
+      xhr.open("GET", query);
+      xhr.onload = function() {
+        if (this.status >= 200 && this.status < 300) {
+          var json = JSON.parse(xhr.response)
+          resolve(json)
+        };
+      }
+      xhr.send();
+    });
+    return promise;
+  }
+
 }
 
 export default App;
