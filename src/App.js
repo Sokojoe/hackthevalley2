@@ -84,12 +84,12 @@ class App extends Component {
 
     return promise;
   }
-  
+
   queryImage(country){
     var xhr = new XMLHttpRequest();
     var query = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f60a9176ead0ea9e3cf7d70b0a4353c7&text="
     + country
-    + "+Landmark&sort=relevance&has_geo=1&extras=url_o&format=json&nojsoncallback=1";
+    + "+Landmark&sort=relevance&has_geo=1&extras=url_o&per_page=10&page=1&format=json&nojsoncallback=1";
     var promise = new Promise(function(resolve, reject) {
       console.log(query);
       xhr.open("GET", query);
