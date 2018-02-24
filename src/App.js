@@ -17,6 +17,12 @@ class SearchButton extends Component {
 
 class App extends Component {
 
+  constructor(props) {
+  super(props);
+  this.state = {imageUrl: null};
+  this.state.imageUrl = "https://farm3.staticflickr.com/2950/33451394876_5b94edcd1c_o.jpg";
+}
+
   render() {
     return (
       <div className="App">
@@ -29,7 +35,7 @@ class App extends Component {
   }
 
   setBackground() {
-    document.body.style.backgroundImage = "url(\"https://farm3.staticflickr.com/2950/33451394876_5b94edcd1c_o.jpg\")";
+    document.body.style.backgroundImage = "url("+this.state.imageUrl+")";
   }
 }
 
