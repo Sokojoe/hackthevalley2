@@ -19,15 +19,12 @@ class App extends Component {
     super(props);
     this.state = {
       bgUrl: "https://c1.staticflickr.com/6/5611/15632179232_385c77cbca_h.jpg",
-      countryName: "Canada",
-      location: "empty",
+      location: "Canada",
       weather: "empty",
       source: "empty",
-      description: "empty",
       time: "empty",
-      population: 0,
+      population: 300000,
       subregion: "North America",
-
     };
     this.countryPromise = this.setCountryList();
   }
@@ -47,22 +44,22 @@ class App extends Component {
     return (<div className="App" style={bgStyle}>
       <div className="container-fluid">
         <div className="row">
-          <div className="location col-md-offset-4 col-md-4">
+          <div className="col-md-offset-0 col-md-12 info location">
             <header className="App-header">
-              <h1>{this.state.countryName}, {this.state.subregion}</h1>
+              <h1>{this.state.location}</h1>
             </header>
           </div>
         </div>
         <div className="row">
-          <div className="population col-md-offset-4 col-md-4">
+          <div className="info col-md-offset-4 col-md-4">
             {this.state.population}
           </div>
         </div>
         <div className="row">
-          <div className="weather col-md-offset-4 col-md-2">
+          <div className="info col-md-offset-4 col-md-2">
             {this.state.weather}
           </div>
-          <div className="time col-md-2">
+          <div className="info col-md-2">
             {this.state.time}
           </div>
         </div>
@@ -97,14 +94,38 @@ class App extends Component {
 
       this.queryImageLocation(photoinfo['id']).then((res)=>{
         console.log(res)
+        var locationJSON = res["photo"]["location"];
+        if (locationJSON["country"]){
+          var country = locationJSON["country"]["_content"];
+        }
+        var place;
+        if (locationJSON["region"]){
+          place = locationJSON["region"]["_content"] + ", ";
+        } else if (locationJSON["locality"]){
+          place = ", " + locationJSON["locality"]["_content"] + ", ";
+        } else if (locationJSON["county"]){
+          place = ", " + locationJSON["county"]["_content"] + ", ";
+        } else {
+          place = ""
+        }
+        var title = place + country;
+        console.log(title);
+        this.setLocation(title);
       })
-      this.setBackground(url)
+      this.setBackground(url);
+
     });
   }
 
   setBackground(url) {
     var newState = this.state;
     newState.bgUrl = url;
+    this.setState(newState);
+  }
+
+  setLocation(title) {
+    var newState = this.state;
+    newState.location = title;
     this.setState(newState);
   }
 
@@ -132,7 +153,6 @@ class App extends Component {
       this.countryPromise.then((countryList) => {
         newState.countryName = countryList[countryID]["name"]
         newState.population = countryList[countryID]['population'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        newState.subregion = countryList[countryID]['subregion']
         this.setState(newState);
         resolve(newState.countryName);
       })

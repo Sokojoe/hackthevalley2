@@ -24,7 +24,7 @@ button {
   vertical-align: middle;
   width: 100%;
   border: 0 solid;
-  box-shadow: 0 0 20px white;
+  box-shadow: 0 0 20px #004ecb;
   outline: 1px solid;
   outline-color: white;
   outline-offset: 0px;
@@ -48,6 +48,9 @@ button {
   height: 100%
 }
 
-.location{
+.info{
   text-align: center;
+  color: white;
+  font-size: 1.5em;
+  text-shadow: 0px 0px 3px black;
 }
