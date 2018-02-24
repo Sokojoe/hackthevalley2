@@ -24,7 +24,9 @@ class App extends Component {
       weather: "empty",
       source: "empty",
       description: "empty",
-      time: "empty"
+      time: "empty",
+      population: 0,
+      subregion: "North America",
 
     };
     this.countryPromise = this.setCountryList();
@@ -47,13 +49,13 @@ class App extends Component {
         <div className="row">
           <div className="location col-md-offset-4 col-md-4">
             <header className="App-header">
-              <h1>{this.state.countryName}</h1>
+              <h1>{this.state.countryName}, {this.state.subregion}</h1>
             </header>
           </div>
         </div>
         <div className="row">
-          <div className="description col-md-offset-4 col-md-4">
-            {this.state.description}
+          <div className="population col-md-offset-4 col-md-4">
+            {this.state.population}
           </div>
         </div>
         <div className="row">
@@ -77,18 +79,25 @@ class App extends Component {
     this.getRandomCountry().then((res) => {
       return this.queryImage(res)
     }).then((photos) => {
-      var photoinfo = photos['photos']['photo'][0];
-      this.queryImageLocation(photoinfo['id']).then((res) => console.log(res))
+      console.log(photos)
+      var photoinfo;
+      if (photos){
+        photoinfo = photos['photos']['photo'][0];
+      }
+      else{
+         photoinfo = {'url_o':"c1.staticflickr.com/1/66/203162060_5e9db072ab_b.jpg"}
+      }
       var url;
-      if (photoinfo) {
-        if (photoinfo['o_url']) {
-          url = photoinfo['o_url']
+        if (photoinfo['url_o']) {
+          console.log(photoinfo)
+          console.log(url = photoinfo['url_o'])
         } else {
           url = "https://farm" + photoinfo['farm'] + ".staticflickr.com/" + photoinfo['server'] + "/" + photoinfo['id'] + "_" + photoinfo['secret'] + "_b.jpg"
         }
-      } else {
-        url = "c1.staticflickr.com/1/66/203162060_5e9db072ab_b.jpg";
-      }
+
+      this.queryImageLocation(photoinfo['id']).then((res)=>{
+        console.log(res)
+      })
       this.setBackground(url)
     });
   }
@@ -122,6 +131,8 @@ class App extends Component {
       var newState = this.state;
       this.countryPromise.then((countryList) => {
         newState.countryName = countryList[countryID]["name"]
+        newState.population = countryList[countryID]['population'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        newState.subregion = countryList[countryID]['subregion']
         this.setState(newState);
         resolve(newState.countryName);
       })
