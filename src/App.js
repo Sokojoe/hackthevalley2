@@ -49,7 +49,7 @@ class App extends Component {
         <div className="row">
           <div className="location col-md-offset-4 col-md-4">
             <header className="App-header">
-              <h1>{this.state.countryName}, {this.state.subregion}</h1>
+                <h1><img className="flag" src={this.state.flag}></img>{this.state.countryName}, {this.state.subregion}</h1>
             </header>
           </div>
         </div>
@@ -133,6 +133,7 @@ class App extends Component {
         newState.countryName = countryList[countryID]["name"]
         newState.population = countryList[countryID]['population'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         newState.subregion = countryList[countryID]['subregion']
+        newState.flag = countryList[countryID]['flag']
         this.setState(newState);
         resolve(newState.countryName);
       })

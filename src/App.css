@@ -2,6 +2,13 @@ button {
   font-family: 'Titillium Web', sans-serif !important;
 }
 
+.flag {
+  width: auto;
+  height: 40px;
+  display: inline;
+  padding-right: 20px;
+}
+
 .button-div {
   padding-top: 30%;
   position: absolute;
@@ -49,5 +56,9 @@ button {
 }
 
 .location{
-  text-align: center;
+  display: inline-block;
+}
+
+.App-header {
+  align-items: center;
 }
