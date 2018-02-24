@@ -8,10 +8,8 @@ class SearchButton extends Component {
   }
 
   render() {
-    return (
-      <button className="SearchButton" type="button" onClick={this.props.onClick}>
-        Search Again</button>
-    )
+    return (<button className="SearchButton" type="button" onClick={this.props.onClick}>
+      Search Again</button>)
   }
 }
 
@@ -21,7 +19,13 @@ class App extends Component {
     super(props);
     this.state = {
       bgUrl: "https://c1.staticflickr.com/6/5611/15632179232_385c77cbca_h.jpg",
-      countryName: "Canada"
+      countryName: "Canada",
+      location: "empty",
+      weather: "empty",
+      source: "empty",
+      description: "empty",
+      time: "empty"
+
     };
     this.countryPromise = this.setCountryList();
   }
@@ -38,17 +42,35 @@ class App extends Component {
       backgroundSize: "cover"
     }
 
-    return (
-      <div className="App" style={bgStyle}>
-        <header className="App-header">
-          <h1>{this.state.countryName}</h1>
-          <div className="button-div">
+    return (<div className="App" style={bgStyle}>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="location col-md-offset-4 col-md-4">
+            <header className="App-header">
+              <h1>{this.state.countryName}</h1>
+            </header>
+          </div>
+        </div>
+        <div className="row">
+          <div className="description col-md-offset-4 col-md-4">
+            {this.state.description}
+          </div>
+        </div>
+        <div className="row">
+          <div className="weather col-md-offset-4 col-md-2">
+            {this.state.weather}
+          </div>
+          <div className="time col-md-2">
+            {this.state.time}
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-offset-4 col-md-4 button-div">
             <SearchButton onClick={() => this.clickButton()}></SearchButton>
           </div>
-        </header>
-        <p className="App-intro"></p>
+        </div>
       </div>
-    );
+    </div>);
   }
 
   clickButton() {
@@ -56,7 +78,7 @@ class App extends Component {
       return this.queryImage(res)
     }).then((photos) => {
       var photoinfo = photos['photos']['photo'][0];
-      this.queryImageLocation(photoinfo['id']).then((res)=>console.log(res))
+      this.queryImageLocation(photoinfo['id']).then((res) => console.log(res))
       var url;
       if (photoinfo) {
         if (photoinfo['o_url']) {
@@ -64,8 +86,7 @@ class App extends Component {
         } else {
           url = "https://farm" + photoinfo['farm'] + ".staticflickr.com/" + photoinfo['server'] + "/" + photoinfo['id'] + "_" + photoinfo['secret'] + "_b.jpg"
         }
-      }
-      else {
+      } else {
         url = "c1.staticflickr.com/1/66/203162060_5e9db072ab_b.jpg";
       }
       this.setBackground(url)
