@@ -48,22 +48,31 @@ class App extends Component {
   }
 
   clickButton() {
-    this.getRandomCountry().then((res) =>{
-        return this.queryImage(res)
-      }).then((photos)=>{
-        console.log(photos);
-        var photoinfo = photos['photos']['photo'][0];
-        var url;
-        if (photoinfo['o_url']){
-          url = photoinfo['o_url']
-        } else{
-          url = "https://farm"+photoinfo['farm']+".staticflickr.com/"+photoinfo['server']+"/"+photoinfo['id']+"_"+photoinfo['secret']+"_b.jpg"
-        }
-        this.setBackground(url)
-      });
+    var photoinfo;
+    this.getRandomCountry().then((res) => {
+      return this.queryImage(res)
+    }).then((photos) => {
+      console.log(photos);
+      photoinfo = photos['photos']['photo'][0];
+      var url;
+      if (photoinfo['o_url']) {
+        url = photoinfo['o_url']
+      } else {
+        url = "https://farm" + photoinfo['farm'] + ".staticflickr.com/" + photoinfo['server'] + "/" + photoinfo['id'] + "_" + photoinfo['secret'] + "_b.jpg"
+      }
+      this.setBackground(url);
+      return photoinfo;
+    }).then((photoinfo) => {
+      return this.queryImageLocation(photoinfo['id']);
+    }).then((location) => {
+      console.log(location)
+    }
+  );
+
+
   }
 
-  setBackground(url){
+  setBackground(url) {
     var newState = this.state;
     newState.bgUrl = url;
     this.setState(newState);
@@ -90,7 +99,7 @@ class App extends Component {
       var numCountries = 250;
       var countryID = Math.floor(Math.random() * numCountries);
       var newState = this.state;
-      this.countryPromise.then((countryList)=>{
+      this.countryPromise.then((countryList) => {
         newState.countryName = countryList[countryID]["name"]
         this.setState(newState);
         resolve(newState.countryName);
@@ -99,11 +108,9 @@ class App extends Component {
     return promise;
   }
 
-  queryImage(country){
+  queryImage(country) {
     var xhr = new XMLHttpRequest();
-    var query = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f60a9176ead0ea9e3cf7d70b0a4353c7&text="
-    + country
-    + "+Landmark&sort=relevance&has_geo=1&extras=url_o&per_page=10&page=1&format=json&nojsoncallback=1";
+    var query = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f60a9176ead0ea9e3cf7d70b0a4353c7&text=" + country + "+Landmark&sort=relevance&has_geo=1&extras=url_o&per_page=10&page=1&format=json&nojsoncallback=1";
     var promise = new Promise(function(resolve, reject) {
       console.log(query);
       xhr.open("GET", query);
@@ -117,6 +124,24 @@ class App extends Component {
     });
     return promise;
   }
+
+  queryImageLocation(id) {
+    var xhr = new XMLHttpRequest();
+    var query = "https://api.flickr.com/services/rest/?method=flickr.photos.geo.getLocation&api_key=f60a9176ead0ea9e3cf7d70b0a4353c7&photo_id=" + id + "&format=json&nojsoncallback=1";
+    var promise = new Promise(function(resolve, reject) {
+      console.log(query);
+      xhr.open("GET", query);
+      xhr.onload = function() {
+        if (this.status >= 200 && this.status < 300) {
+          var json = JSON.parse(xhr.response)
+          resolve(json)
+        };
+      }
+      xhr.send();
+    });
+    return promise;
+  }
+
 }
 
 export default App;
