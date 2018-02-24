@@ -8,10 +8,8 @@ class SearchButton extends Component {
   }
 
   render() {
-    return (
-      <button type="button" onClick={this.props.onClick}>
-        Search Again</button>
-    )
+    return (<button className="SearchButton" type="button" onClick={this.props.onClick}>
+      Search Again</button>)
   }
 }
 
@@ -38,15 +36,15 @@ class App extends Component {
       backgroundSize: "cover"
     }
 
-    return (
-      <div className="App" style={bgStyle}>
-        <header className="App-header">
-          <h1>{this.state.countryName}</h1>
+    return (<div className="App" style={bgStyle}>
+      <header className="App-header">
+        <h1>{this.state.countryName}</h1>
+        <div className="button-div">
           <SearchButton onClick={() => this.setBackground()}></SearchButton>
-        </header>
-        <p className="App-intro"></p>
-      </div>
-    );
+        </div>
+      </header>
+      <p className="App-intro"></p>
+    </div>);
   }
 
   setBackground() {
@@ -54,7 +52,6 @@ class App extends Component {
     this.getRandomCountry().then((valid)=>this.queryImage(valid));
     newState.bgUrl = "https://farm5.staticflickr.com/4382/36695323441_29f4831549_k_d.jpg";
     this.setState(newState);
-    //document.body.style.backgroundImage = "url(\"https://farm3.staticflickr.com/2950/33451394876_5b94edcd1c_o.jpg\")";
   }
 
   setCountryList() {
@@ -68,10 +65,10 @@ class App extends Component {
           resolve(JSON.parse(xhr.response))
         };
       }
-    xhr.send();
-  });
-  return promise;
-}
+      xhr.send();
+    });
+    return promise;
+  }
 
   getRandomCountry() {
     var promise = new Promise((resolve, reject) => {
@@ -87,6 +84,7 @@ class App extends Component {
 
     return promise;
   }
+  
   queryImage(country){
     var xhr = new XMLHttpRequest();
     var query = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f60a9176ead0ea9e3cf7d70b0a4353c7&text="
