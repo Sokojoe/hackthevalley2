@@ -51,7 +51,7 @@ class App extends Component {
 
   setBackground() {
     var newState = this.state;
-    this.getRandomCountry();
+    this.getRandomCountry().then((valid)=>this.queryImage(valid));
     newState.bgUrl = "https://farm5.staticflickr.com/4382/36695323441_29f4831549_k_d.jpg";
     this.setState(newState);
     //document.body.style.backgroundImage = "url(\"https://farm3.staticflickr.com/2950/33451394876_5b94edcd1c_o.jpg\")";
@@ -73,14 +73,36 @@ class App extends Component {
   return promise;
 }
 
-getRandomCountry() {
-  var numCountries = 250;
-  var countryID = Math.floor(Math.random() * numCountries);
-  var newState = this.state;
-  this.countryPromise.then((countryList)=>{
-    newState.countryName = countryList[countryID]["name"]
-    this.setState(newState);
-  })
+  getRandomCountry() {
+    var promise = new Promise((resolve, reject) => {
+      var numCountries = 250;
+      var countryID = Math.floor(Math.random() * numCountries);
+      var newState = this.state;
+      this.countryPromise.then((countryList)=>{
+        newState.countryName = countryList[countryID]["name"]
+        this.setState(newState);
+        resolve(newState.countryName);
+      })
+    })
+
+    return promise;
+  }
+  queryImage(country){
+    var xhr = new XMLHttpRequest();
+    var query = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f60a9176ead0ea9e3cf7d70b0a4353c7&text="
+    + country
+    + "+Landmark&sort=relevance&has_geo=1&extras=url_o&format=json&nojsoncallback=1";
+    var promise = new Promise(function(resolve, reject) {
+      console.log(query);
+      xhr.open("GET", query);
+      xhr.onload = function() {
+        if (this.status >= 200 && this.status < 300) {
+          resolve(console.log(JSON.parse(xhr.response)))
+        };
+      }
+      xhr.send();
+    });
+  }
 }
-}
+
 export default App;
