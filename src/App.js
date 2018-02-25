@@ -19,15 +19,14 @@ class App extends Component {
     super(props);
     this.state = {
       bgUrl: "https://c1.staticflickr.com/6/5611/15632179232_385c77cbca_h.jpg",
-      location: "Canada",
-      lat: "",
-      lon: "",
-      weather: "empty",
-      source: "empty",
-      time: "empty",
+      location: "Banff, Canada",
+      lat: 51.178,
+      lon: -115.5708,
       population: 300000,
-      subregion: "North America",
-      url: " ",
+      url: "https://www.google.com/maps/search/?api=1&query=51.180,-115.565",
+      weather: "",
+      source: "",
+      subregion: "North America"
     };
     this.countryPromise = this.setCountryList();
   }
@@ -60,7 +59,7 @@ class App extends Component {
         </div>
         <div className="row">
           <div className="info weather col-md-offset-4 col-md-4">
-            {this.state.weather} &nbsp;&nbsp; {this.state.time}
+            {this.state.weather}
           </div>
         </div>
         <div className="row">
