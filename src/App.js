@@ -20,6 +20,8 @@ class App extends Component {
     this.state = {
       bgUrl: "https://c1.staticflickr.com/6/5611/15632179232_385c77cbca_h.jpg",
       location: "Canada",
+      lat: "",
+      lon: "",
       weather: "empty",
       source: "empty",
       time: "empty",
@@ -53,15 +55,12 @@ class App extends Component {
         </div>
         <div className="row">
           <div className="info col-md-offset-4 col-md-4">
-            {this.state.population}
+            <em>LAT: {this.state.lat}  &nbsp;&nbsp; LON: {this.state.lon}</em>
           </div>
         </div>
         <div className="row">
-          <div className="info weather col-md-offset-2 col-md-4">
-            {this.state.weather}
-          </div>
-          <div className="info time col-md-4">
-            {this.state.time}
+          <div className="info weather col-md-offset-4 col-md-4">
+            {this.state.weather} &nbsp;&nbsp; {this.state.time}
           </div>
         </div>
         <div className="row">
@@ -118,10 +117,10 @@ class App extends Component {
       newState.location = title;
       return locationJSON;
     }).then((locationJSON) => {
-      var lat = locationJSON["latitude"];
-      var lon = locationJSON["longitude"];
-      console.log(lat, lon);
-      return this.getWeatherInfo(lat, lon);
+      newState.lat = locationJSON["latitude"];
+      newState.lon = locationJSON["longitude"];
+      console.log(newState.lat, newState.lon);
+      return this.getWeatherInfo(newState.lat, newState.lon);
     }).then((weatherJSON) => {
       var temp = Math.floor(weatherJSON["main"]["temp"] - 273.15);
       var weather = weatherJSON["weather"][0]["description"];
