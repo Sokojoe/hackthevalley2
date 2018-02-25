@@ -26,7 +26,8 @@ class App extends Component {
       source: "empty",
       time: "empty",
       population: 300000,
-      subregion: "North America"
+      subregion: "North America",
+      url: " ",
     };
     this.countryPromise = this.setCountryList();
   }
@@ -42,7 +43,6 @@ class App extends Component {
       right: "0",
       backgroundSize: "cover"
     }
-
     return (<div className="App" style={bgStyle}>
       <div className="container-fluid">
         <div className="row">
@@ -66,6 +66,7 @@ class App extends Component {
         <div className="row">
           <div className="col-md-offset-4 col-md-4 button-div">
             <SearchButton onClick={() => this.clickButton()}></SearchButton>
+            <a id="Travel" href={this.state.url} target="_blank">Travel Here</a>
           </div>
         </div>
       </div>
@@ -120,6 +121,7 @@ class App extends Component {
       newState.lat = locationJSON["latitude"];
       newState.lon = locationJSON["longitude"];
       console.log(newState.lat, newState.lon);
+      this.state.url = "https://www.google.com/maps/search/?api=1&query="+this.state.lat+","+ this.state.lon;
       return this.getWeatherInfo(newState.lat, newState.lon);
     }).then((weatherJSON) => {
       var temp = Math.floor(weatherJSON["main"]["temp"] - 273.15);
