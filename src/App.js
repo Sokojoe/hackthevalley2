@@ -125,7 +125,7 @@ class App extends Component {
     }).then((weatherJSON) => {
       var temp = Math.floor(weatherJSON["main"]["temp"] - 273.15);
       var weather = weatherJSON["weather"][0]["description"];
-      newState.weather = weather + ", " + temp + "C";
+      newState.weather = weather + ", " + temp + "ºC";
     }).then(() => {
       this.setState(newState)
     });
