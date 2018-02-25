@@ -108,9 +108,9 @@ class App extends Component {
       if (locationJSON["region"]) {
         place = locationJSON["region"]["_content"] + ", ";
       } else if (locationJSON["locality"]) {
-        place = ", " + locationJSON["locality"]["_content"] + ", ";
+        place = locationJSON["locality"]["_content"] + ", ";
       } else if (locationJSON["county"]) {
-        place = ", " + locationJSON["county"]["_content"] + ", ";
+        place = locationJSON["county"]["_content"] + ", ";
       }
       var title = place + country;
       console.log(title);
