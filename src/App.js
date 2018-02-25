@@ -22,10 +22,9 @@ class App extends Component {
       location: "Canada",
       lat: "",
       lon: "",
-      weather: "empty",
-      source: "empty",
-      time: "empty",
-      population: 300000,
+      weather: "",
+      source: "",
+      population: "",
       subregion: "North America"
     };
     this.countryPromise = this.setCountryList();
@@ -60,7 +59,7 @@ class App extends Component {
         </div>
         <div className="row">
           <div className="info weather col-md-offset-4 col-md-4">
-            {this.state.weather} &nbsp;&nbsp; {this.state.time}
+            {this.state.weather}
           </div>
         </div>
         <div className="row">
