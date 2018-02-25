@@ -45,7 +45,7 @@ class App extends Component {
     return (<div className="App" style={bgStyle}>
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-offset-0 col-md-12 info location">
+          <div className="col-xs-offset-0 col-xs-12 info location">
             <header className="App-header">
               <h1>
                 <img className="flag" src={this.state.flag}></img>{this.state.location}</h1>
@@ -53,17 +53,17 @@ class App extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="info col-md-offset-4 col-md-4">
+          <div className="info col-xs-offset-4 col-xs-4">
             <em>LAT: {this.state.lat}  &nbsp;&nbsp; LON: {this.state.lon}</em>
           </div>
         </div>
         <div className="row">
-          <div className="info weather col-md-offset-4 col-md-4">
+          <div className="info weather col-xs-offset-4 col-xs-4">
             {this.state.weather}
           </div>
         </div>
         <div className="row">
-          <div className="col-md-offset-4 col-md-4 button-div">
+          <div className="col-xs-offset-4 col-xs-4 button-div">
             <SearchButton onClick={() => this.clickButton()}></SearchButton>
             <a id="Travel" href={this.state.url} target="_blank">Travel Here</a>
           </div>
